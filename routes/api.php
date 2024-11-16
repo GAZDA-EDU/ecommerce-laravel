@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BrandsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +23,9 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router) {
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);
 });
+
+Route::get('index', [BrandsController::class, 'index']);
+Route::get('show/{id}', [BrandsController::class, 'show']);
+Route::post('store', [BrandsController::class, 'store']);
+Route::put('update_brand/{id}', [BrandsController::class, 'update_brand']);
+Route::delete('delete_brand/{id}', [BrandsController::class, 'delete']);
