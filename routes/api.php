@@ -6,6 +6,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrandsController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\ProductController;
+use App\Models\Product;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +47,14 @@ Route::controller(CategoryController::class)->group(function(){
 });
 
 Route::controller(LocationController::class)->group(function(){
+    Route::post('store', 'store');
+    Route::put('update/{id}', 'update');
+    Route::delete('destroy/{id}', 'destroy');
+});
+
+Route::controller(ProductController::class)->group(function(){
+    Route::get('index', 'index');
+    Route::get('show/{id}', 'show');
     Route::post('store', 'store');
     Route::put('update/{id}', 'update');
     Route::delete('destroy/{id}', 'destroy');
