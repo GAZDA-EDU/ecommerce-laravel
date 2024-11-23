@@ -52,7 +52,7 @@ class OrderController extends Controller
             $order->date_of_delivery=$request->date_of_delivery;
             $order->save();
 
-            foreach($request->order as $order_items)
+            foreach($request->order_items as $order_items)
             {
                 $items = new OrderItems();
                 $items->order_id=$order->id;
@@ -61,13 +61,13 @@ class OrderController extends Controller
                 $items->quantity=$order_items['quantity'];
                 $items->save();
                 $product = Product::where('id', $order_items['product_id'])->first();
-                $product->quantity=$order_items['quantity'];
+                $product->amount-=$order_items['quantity'];
                 $product->save();
             }
             return response()->json('order is added', 201);
         }
         catch(Exception $e){
-            return response()->json($e);
+            return response()->json($e, 500);
         }
     }
 
@@ -88,15 +88,16 @@ class OrderController extends Controller
     public function get_user_orders($id)
     {
         $orders=Order::where('user_id',$id)
-        ::with('items', function($query){
+        ->with('items', function($query){
             $query->orderBy('created_at', 'desc');
         })->get();
 
         if($orders){
-            foreach($orders->items as $order)
+            foreach($orders as $order)
             {
-                $product=Product::where('id', $order->product_id)->pluck('name');
-                $order->product_name=$product['0'];
+                foreach($order->items as $order_items)
+                $product=Product::where('id', $order_items->product_id)->pluck('name');
+                $order_items->product_name=$product['0'];
             }
             return response()->json($orders);
         }

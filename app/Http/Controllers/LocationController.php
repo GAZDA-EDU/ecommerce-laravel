@@ -16,12 +16,12 @@ class LocationController extends Controller
             'area' => 'required'
         ]);
 
-        Location::create([
-            'street' => $request->street,
-            'building' => $request->building,
-            'area' => $request->area,
-            'user_id' => Auth::id(),
-        ]);
+        $location = new Location();
+        $location->street = $request->street;
+        $location->building = $request->building;
+        $location->area = $request->area;
+        $location->user_id = Auth::id();
+        $location->save();
 
         return response()->json('location added', 201);
     }
