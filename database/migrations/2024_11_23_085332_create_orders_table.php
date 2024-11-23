@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('locations', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->enum('status', ['Pending', 'Deliverd', 'Out for delivery', 'Canceled', 'Accepted'])->default('Pending');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('street');
-            $table->string('building');
-            $table->string('area');
+            $table->foreignId('location_id')->references('id')->on('locations')->onDelete('cascade');
+            $table->double('total_price', 12, 2);
+            $table->string('date_of_delivery');
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('locations');
+        Schema::dropIfExists('orders');
     }
 };
