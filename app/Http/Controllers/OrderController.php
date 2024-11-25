@@ -87,17 +87,19 @@ class OrderController extends Controller
 
     public function get_user_orders($id)
     {
-        $orders=Order::where('user_id',$id)
-        ->with('items', function($query){
-            $query->orderBy('created_at', 'desc');
-        })->get();
+        $orders=Order::with('items')
+        ->where('user_id',$id)
+        ->get();
 
         if($orders){
             foreach($orders as $order)
             {
                 foreach($order->items as $order_items)
-                $product=Product::where('id', $order_items->product_id)->pluck('name');
-                $order_items->product_name=$product['0'];
+                {
+                    $product=Product::where('id', $order_items->product_id)->pluck('name');
+                    $order_items->product_name=$product['0'];
+                }
+
             }
             return response()->json($orders);
         }

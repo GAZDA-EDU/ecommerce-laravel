@@ -26,4 +26,9 @@ class Order extends Model
     {
         return $this->belongsTo(Location::class, 'location_id');
     }
+
+    public function items()
+    {
+        return $this->hasMany(OrderItems::class);
+    }
 }

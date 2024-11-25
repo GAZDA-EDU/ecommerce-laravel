@@ -75,7 +75,7 @@ Route::group(['prefix'=>'product'], function($router){
 
 
 // Order CRUD
-Route::group(['prefix'=>'order'], function($router){
+Route::group(['prefix'=>'orders'], function($router){
     Route::controller(OrderController::class)->group(function(){
         Route::get('index', 'index');
         Route::get('show/{id}', 'show');

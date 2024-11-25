@@ -31,10 +31,26 @@ class CategoryController extends Controller
         try{
             $validated = $request->validate([
                 'name'=>'required|unique:category,name',
-                //'image'=>'required'
+                'image'=>'required'
             ]);
             $category = new Categories();
             $category -> name = $request->name;
+            if ($request->hasFile('image')){
+                $path = 'assets/uploads/category/' . $category->image;
+                if (File::exists($path)) {
+                    File::delete($path);
+                }
+                $file = $request->file('image');
+                $ext = $file->getClientOriginalExtension();
+                $filename = time() . '.' . $ext;
+                try{
+                    $file->move('assets/uploads/category/', $filename);
+                }
+                catch (FileException $e){
+                    dd($e);
+                }
+                $category->image = $filename;
+            }
             $category -> save();
             return response()->json('category added', 201);
         }
@@ -51,7 +67,8 @@ class CategoryController extends Controller
                 //'image' => 'required'
             ]);
             $category = Categories::find($id);
-            /**if ($request->hasFile('image')){
+            $category->name = $request->name;
+            if ($request->hasFile('image')){
                 $path = 'assets/uploads/category/' . $category->image;
                 if (File::exists($path)) {
                     File::delete($path);
@@ -66,9 +83,8 @@ class CategoryController extends Controller
                     dd($e);
                 }
                 $category->image = $filename;
-            }*/
-            $category->name = $request->name;
-            $category->update();
+            }
+            $category->save();
             return response()->json('category updated', 200);
         }
         catch(Exception $e){
