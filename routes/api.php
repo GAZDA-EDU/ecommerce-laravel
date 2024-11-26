@@ -32,11 +32,11 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router) {
 // Brands CRUD
 Route::group(['prefix'=>'brands'], function($router){
     Route::controller(BrandsController::class)->group(function(){
-        Route::get('index', 'index');
-        Route::get('show/{id}', 'show');
-        Route::post('store', 'store');
-        Route::put('update_brand/{id}', 'update_brand');
-        Route::delete('delete_brand/{id}', 'delete_brand');
+        Route::get('index', 'index')->middleware('is_admin');
+        Route::get('show/{id}', 'show')->middleware('is_admin');
+        Route::post('store', 'store')->middleware('is_admin');
+        Route::put('update_brand/{id}', 'update_brand')->middleware('is_admin');
+        Route::delete('delete_brand/{id}', 'delete_brand')->middleware('is_admin');
     });
 });
 
@@ -44,11 +44,11 @@ Route::group(['prefix'=>'brands'], function($router){
 // Category CRUD
 Route::group(['prefix'=>'category'], function($router){
     Route::controller(CategoryController::class)->group(function(){
-        Route::get('index', 'index');
-        Route::get('show/{id}', 'show');
-        Route::post('store', 'store');
-        Route::put('update_category/{id}', 'update_category');
-        Route::delete('delete_category/{id}', 'delete_category');
+        Route::get('index', 'index')->middleware('is_admin');
+        Route::get('show/{id}', 'show')->middleware('is_admin');
+        Route::post('store', 'store')->middleware('is_admin');
+        Route::put('update_category/{id}', 'update_category')->middleware('is_admin');
+        Route::delete('delete_category/{id}', 'delete_category')->middleware('is_admin');
     });
 });
 
@@ -56,20 +56,20 @@ Route::group(['prefix'=>'category'], function($router){
 // Location CRUD
 Route::group(['prefix'=>'location'],function($router){
     Route::controller(LocationController::class)->group(function(){
-        Route::post('store', 'store');
-        Route::put('update/{id}', 'update');
-        Route::delete('destroy/{id}', 'destroy');
+        Route::post('store', 'store')->middleware('auth');
+        Route::put('update/{id}', 'update')->middleware('auth');
+        Route::delete('destroy/{id}', 'destroy')->middleware('auth');
     });
 });
 
 // Product CRUD
 Route::group(['prefix'=>'product'], function($router){
     Route::controller(ProductController::class)->group(function(){
-        Route::get('index', 'index');
-        Route::get('show/{id}', 'show');
-        Route::post('store', 'store');
-        Route::put('update/{id}', 'update');
-        Route::delete('destroy/{id}', 'destroy');
+        Route::get('index', 'index')->middleware('auth');
+        Route::get('show/{id}', 'show')->middleware('auth');
+        Route::post('store', 'store')->middleware('is_admin');
+        Route::put('update/{id}', 'update')->middleware('is_admin');
+        Route::delete('destroy/{id}', 'destroy')->middleware('is_admin');
     });
 });
 
@@ -77,12 +77,12 @@ Route::group(['prefix'=>'product'], function($router){
 // Order CRUD
 Route::group(['prefix'=>'orders'], function($router){
     Route::controller(OrderController::class)->group(function(){
-        Route::get('index', 'index');
-        Route::get('show/{id}', 'show');
-        Route::post('store', 'store');
-        Route::get('get_order_items/{id}', 'get_order_items');
-        Route::get('get_user_orders/{id}', 'get_user_orders');
-        Route::post('change_order_status/{id}', 'change_order_status');
+        Route::get('index', 'index')->middleware('is_admin');
+        Route::get('show/{id}', 'show')->middleware('is_admin');
+        Route::post('store', 'store')->middleware('auth');
+        Route::get('get_order_items/{id}', 'get_order_items')->middleware('is_admin');
+        Route::get('get_user_orders/{id}', 'get_user_orders')->middleware('is_admin');
+        Route::post('change_order_status/{id}', 'change_order_status')->middleware('is_admin');
     });
 });
 
